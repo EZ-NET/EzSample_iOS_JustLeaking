@@ -10,4 +10,8 @@
 
 @interface EzSampleViewController : UIViewController
 
+- (IBAction)NSThreadTest:(UIButton*)sender;
+- (IBAction)NSOperationTest:(UIButton*)sender;
+- (IBAction)PerformSelectorInBackgroundTest:(UIButton*)sender;
+
 @end

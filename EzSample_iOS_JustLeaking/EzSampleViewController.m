@@ -8,22 +8,74 @@
 
 #import "EzSampleViewController.h"
 
-@interface EzSampleViewController ()
+@interface EzSampleOperation : NSOperation
+
+@end
+
+@interface EzSampleViewController (Test)
+
++ (void)test;
++ (NSString*)string;
+
+- (void)test:(id)sender;
+
+@end
+
+@implementation EzSampleOperation
+
+- (void)main
+{
+	[EzSampleViewController test];
+}
+
+@end
+
+@implementation EzSampleViewController (Test)
+
++ (NSString*)string
+{
+	return [NSString stringWithFormat:@"TEST"];
+}
+
++ (void)test
+{
+	[EzSampleViewController string];
+}
+
+- (void)test:(id)sender
+{
+	[EzSampleViewController test];
+}
 
 @end
 
 @implementation EzSampleViewController
 
-- (void)viewDidLoad
++ (void)load
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	[EzSampleViewController test];
 }
 
-- (void)didReceiveMemoryWarning
+- (IBAction)NSThreadTest:(UIButton*)sender
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+	[NSThread detachNewThreadSelector:@selector(test:) toTarget:self withObject:nil];
+}
+
+- (IBAction)NSOperationTest:(UIButton*)sender
+{
+	NSOperationQueue* queue = [[NSOperationQueue alloc] init];
+	NSOperation* operation = [[EzSampleOperation alloc] init];
+	
+	[queue addOperation:operation];
+	[queue waitUntilAllOperationsAreFinished];
+	
+	[operation release];
+	[queue release];
+}
+
+- (IBAction)PerformSelectorInBackgroundTest:(UIButton*)sender
+{
+	[self performSelectorInBackground:@selector(test:) withObject:nil];
 }
 
 @end
